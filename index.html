@@ -61,6 +61,18 @@ tr:last-child td{border-bottom:none}
 .chart-title{font-size:13px;color:#888;margin-bottom:.75rem;font-weight:500}
 .insta-link{color:#185FA5;text-decoration:none}
 .insta-link:hover{text-decoration:underline}
+.lock-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1rem;text-align:center}
+.lock-icon{font-size:40px;margin-bottom:1rem}
+.lock-title{font-size:16px;font-weight:500;margin-bottom:.5rem;color:#1a1a1a}
+.lock-desc{font-size:13px;color:#888;margin-bottom:1.5rem}
+.lock-input-row{display:flex;gap:8px;width:100%;max-width:280px}
+.lock-input-row input{flex:1;font-size:14px;padding:9px 12px;border:1px solid #ddd;border-radius:8px;outline:none;text-align:center;letter-spacing:4px}
+.lock-input-row input:focus{border-color:#888}
+.lock-btn{padding:9px 18px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer}
+.lock-btn:hover{opacity:.85}
+.lock-err{font-size:13px;color:#e24b4a;margin-top:8px;min-height:18px}
+.logout-btn{font-size:12px;color:#aaa;background:none;border:none;cursor:pointer;margin-left:auto;padding:4px 8px}
+.logout-btn:hover{color:#666}
 @media(max-width:480px){.form-row{grid-template-columns:1fr}}
 </style>
 </head>
@@ -92,7 +104,7 @@ tr:last-child td{border-bottom:none}
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>나이 (만 나이 금지) <span class="required">*</span></label>
+          <label>나이 <span class="required">*</span></label>
           <input type="number" id="inp-age" placeholder="25" min="10" max="99" />
         </div>
         <div class="form-group">
@@ -117,7 +129,6 @@ tr:last-child td{border-bottom:none}
         </div>
         <div></div>
       </div>
-
       <div class="agree-box" id="agree-box-1">
         <div class="agree-text">
           <strong>개인정보 수집 및 활용 동의</strong><br/>
@@ -128,7 +139,6 @@ tr:last-child td{border-bottom:none}
           <span>개인정보 수집 및 활용에 동의합니다. <span class="required">*</span></span>
         </label>
       </div>
-
       <div class="agree-box" id="agree-box-2">
         <div class="agree-text">
           <strong>사진 및 동영상 촬영 동의</strong><br/>
@@ -139,49 +149,81 @@ tr:last-child td{border-bottom:none}
           <span>사진 및 동영상 촬영에 동의합니다. <span class="required">*</span></span>
         </label>
       </div>
-
       <button class="btn-primary" id="submit-btn" onclick="registerPlayer()">신청하기</button>
       <div class="msg" id="reg-msg"></div>
     </div>
   </div>
 
   <div id="sec-list" class="section">
-    <div class="filter-bar">
-      <select class="filter-select" id="filter-gender" onchange="renderList()">
-        <option value="">성별 전체</option>
-        <option value="남성">남성</option>
-        <option value="여성">여성</option>
-      </select>
-      <select class="filter-select" id="filter-age" onchange="renderList()">
-        <option value="">나이대 전체</option>
-        <option value="10">10대</option>
-        <option value="20">20대</option>
-        <option value="30">30대</option>
-        <option value="40">40대</option>
-        <option value="50">50대+</option>
-      </select>
-      <select class="filter-select" id="filter-exp" onchange="renderList()">
-        <option value="">구력 전체</option>
-        <option value="0">1년 미만</option>
-        <option value="1">1~3년</option>
-        <option value="3">3~5년</option>
-        <option value="5">5~10년</option>
-        <option value="10">10년+</option>
-      </select>
-      <button class="refresh-btn" onclick="loadPlayers()">🔄 새로고침</button>
+    <div id="list-lock">
+      <div class="lock-screen">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">관리자 전용 페이지</div>
+        <div class="lock-desc">참가자 목록은 관리자만 열람할 수 있어요.</div>
+        <div class="lock-input-row">
+          <input type="password" id="pw-list" placeholder="비밀번호" onkeydown="if(event.key==='Enter')unlockList()" />
+          <button class="lock-btn" onclick="unlockList()">확인</button>
+        </div>
+        <div class="lock-err" id="err-list"></div>
+      </div>
     </div>
-    <div class="card">
-      <div id="list-body"><div class="loading">불러오는 중...</div></div>
+    <div id="list-content" style="display:none">
+      <div class="filter-bar">
+        <select class="filter-select" id="filter-gender" onchange="renderList()">
+          <option value="">성별 전체</option>
+          <option value="남성">남성</option>
+          <option value="여성">여성</option>
+        </select>
+        <select class="filter-select" id="filter-age" onchange="renderList()">
+          <option value="">나이대 전체</option>
+          <option value="10">10대</option>
+          <option value="20">20대</option>
+          <option value="30">30대</option>
+          <option value="40">40대</option>
+          <option value="50">50대+</option>
+        </select>
+        <select class="filter-select" id="filter-exp" onchange="renderList()">
+          <option value="">구력 전체</option>
+          <option value="0">1년 미만</option>
+          <option value="1">1~3년</option>
+          <option value="3">3~5년</option>
+          <option value="5">5~10년</option>
+          <option value="10">10년+</option>
+        </select>
+        <button class="refresh-btn" onclick="loadPlayers()">🔄 새로고침</button>
+        <button class="logout-btn" onclick="lockSection('list')">나가기</button>
+      </div>
+      <div class="card">
+        <div id="list-body"><div class="loading">불러오는 중...</div></div>
+      </div>
     </div>
   </div>
 
   <div id="sec-stats" class="section">
-    <div id="stats-body"><div class="loading">불러오는 중...</div></div>
+    <div id="stats-lock">
+      <div class="lock-screen">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">관리자 전용 페이지</div>
+        <div class="lock-desc">통계는 관리자만 열람할 수 있어요.</div>
+        <div class="lock-input-row">
+          <input type="password" id="pw-stats" placeholder="비밀번호" onkeydown="if(event.key==='Enter')unlockStats()" />
+          <button class="lock-btn" onclick="unlockStats()">확인</button>
+        </div>
+        <div class="lock-err" id="err-stats"></div>
+      </div>
+    </div>
+    <div id="stats-content" style="display:none">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+        <button class="logout-btn" onclick="lockSection('stats')">나가기</button>
+      </div>
+      <div id="stats-body"><div class="loading">불러오는 중...</div></div>
+    </div>
   </div>
 </div>
 
 <script>
 const API = 'https://script.google.com/macros/s/AKfycbz5Zi6RNdzDXOojT3ztmcuvFKhM-SpmxRSXSDZG8v24jkb_Zu2_PKUkl6VrJzYjz0dqsA/exec';
+const ADMIN_PW = '0988';
 let players = [];
 
 function switchTab(t){
@@ -191,8 +233,39 @@ function switchTab(t){
   ['register','list','stats'].forEach(s=>{
     document.getElementById('sec-'+s).classList.toggle('active',s===t);
   });
-  if(t==='list'){if(!players.length)loadPlayers();else renderList();}
-  if(t==='stats'){if(!players.length)loadPlayers('stats');else renderStats();}
+}
+
+function unlockList(){
+  const pw = document.getElementById('pw-list').value;
+  if(pw === ADMIN_PW){
+    document.getElementById('list-lock').style.display='none';
+    document.getElementById('list-content').style.display='block';
+    if(!players.length) loadPlayers(); else renderList();
+  } else {
+    document.getElementById('err-list').textContent='비밀번호가 올바르지 않아요.';
+    document.getElementById('pw-list').value='';
+    setTimeout(()=>document.getElementById('err-list').textContent='',2000);
+  }
+}
+
+function unlockStats(){
+  const pw = document.getElementById('pw-stats').value;
+  if(pw === ADMIN_PW){
+    document.getElementById('stats-lock').style.display='none';
+    document.getElementById('stats-content').style.display='block';
+    if(!players.length) loadPlayers('stats'); else renderStats();
+  } else {
+    document.getElementById('err-stats').textContent='비밀번호가 올바르지 않아요.';
+    document.getElementById('pw-stats').value='';
+    setTimeout(()=>document.getElementById('err-stats').textContent='',2000);
+  }
+}
+
+function lockSection(sec){
+  document.getElementById(sec+'-lock').style.display='block';
+  document.getElementById(sec+'-content').style.display='none';
+  document.getElementById('pw-'+sec).value='';
+  switchTab('register');
 }
 
 async function loadPlayers(target){
@@ -200,8 +273,7 @@ async function loadPlayers(target){
     const res = await fetch(API+'?action=getAll');
     const data = await res.json();
     players = data.players || [];
-    if(target==='stats') renderStats();
-    else renderList();
+    if(target==='stats') renderStats(); else renderList();
   }catch(e){
     const el=document.getElementById(target==='stats'?'stats-body':'list-body');
     el.innerHTML='<div class="empty" style="color:#e24b4a">데이터를 불러오지 못했어요.<br>Apps Script 배포 설정을 확인해 주세요.</div>';
@@ -237,27 +309,19 @@ async function registerPlayer(){
   const insta=document.getElementById('inp-insta').value.trim();
   const privacyOk=document.getElementById('chk-privacy').checked;
   const photoOk=document.getElementById('chk-photo').checked;
-
   if(!name||!age||!gender||exp===''){showMsg('필수 항목(이름, 나이, 성별, 구력)을 입력해 주세요.','error');return;}
-
   if(!privacyOk){
     document.getElementById('agree-box-1').classList.add('required-alert');
     showMsg('개인정보 수집 및 활용에 동의해 주세요.','error');
     document.getElementById('agree-box-1').scrollIntoView({behavior:'smooth',block:'center'});
     return;
-  } else {
-    document.getElementById('agree-box-1').classList.remove('required-alert');
-  }
-
+  } else document.getElementById('agree-box-1').classList.remove('required-alert');
   if(!photoOk){
     document.getElementById('agree-box-2').classList.add('required-alert');
     showMsg('사진 및 동영상 촬영에 동의해 주세요.','error');
     document.getElementById('agree-box-2').scrollIntoView({behavior:'smooth',block:'center'});
     return;
-  } else {
-    document.getElementById('agree-box-2').classList.remove('required-alert');
-  }
-
+  } else document.getElementById('agree-box-2').classList.remove('required-alert');
   const btn=document.getElementById('submit-btn');
   btn.disabled=true;btn.textContent='저장 중...';
   try{
