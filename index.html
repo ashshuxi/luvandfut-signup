@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>럽앤풋 참가 신청서</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#1a1a1a;min-height:100vh}
+.container{max-width:680px;margin:0 auto;padding:2rem 1rem}
+h1{font-size:20px;font-weight:600;margin-bottom:1.5rem;color:#1a1a1a}
+.tabs{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:8px 18px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:14px;color:#666;transition:all .15s}
+.tab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a;font-weight:500}
+.section{display:none}.section.active{display:block}
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem;margin-bottom:12px}
+.card-title{font-size:15px;font-weight:500;margin-bottom:1rem;color:#1a1a1a}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:13px;color:#666}
+.form-group input,.form-group select{font-size:14px;padding:9px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a1a;outline:none;transition:border .15s}
+.form-group input:focus,.form-group select:focus{border-color:#888}
+.form-group input::placeholder{color:#bbb}
+.required{color:#e24b4a;margin-left:2px}
+.agree-box{border:1px solid #e5e5e5;border-radius:10px;padding:1rem;margin-bottom:12px;background:#fafafa}
+.agree-text{font-size:13px;color:#444;line-height:1.6;margin-bottom:10px}
+.agree-text strong{font-weight:500;color:#1a1a1a}
+.agree-check{display:flex;align-items:center;gap:8px;cursor:pointer}
+.agree-check input[type=checkbox]{width:17px;height:17px;cursor:pointer;accent-color:#1a1a1a;flex-shrink:0}
+.agree-check span{font-size:13px;font-weight:500;color:#1a1a1a}
+.agree-box.required-alert{border-color:#e24b4a;background:#fff8f8}
+.btn-primary{width:100%;padding:11px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;margin-top:6px;transition:opacity .15s}
+.btn-primary:hover{opacity:.85}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.msg{display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-top:10px}
+.msg.success{background:#eaf3de;color:#27500a}
+.msg.error{background:#fcebeb;color:#791f1f}
+.filter-bar{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.filter-select{font-size:13px;padding:7px 10px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a1a;outline:none}
+.refresh-btn{padding:7px 14px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#666;cursor:pointer;margin-left:auto}
+.refresh-btn:hover{background:#f5f5f5}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:1.25rem}
+.stat-card{background:#f5f5f5;border-radius:8px;padding:.875rem;text-align:center}
+.stat-val{font-size:22px;font-weight:600;color:#1a1a1a}
+.stat-lbl{font-size:12px;color:#888;margin-top:2px}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th{text-align:left;padding:9px 10px;border-bottom:1px solid #eee;color:#888;font-weight:500;white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid #eee;color:#1a1a1a;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:100px}
+.badge-m{background:#E6F1FB;color:#0C447C}
+.badge-f{background:#FBEAF0;color:#72243E}
+.empty{text-align:center;padding:2rem;color:#888;font-size:14px}
+.loading{text-align:center;padding:1.5rem;color:#888;font-size:13px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px}
+.bar-label{min-width:75px;color:#888;text-align:right;font-size:12px}
+.bar-bg{flex:1;height:20px;background:#f0f0f0;border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .4s}
+.bar-count{min-width:28px;color:#1a1a1a;font-weight:500;font-size:12px}
+.chart-title{font-size:13px;color:#888;margin-bottom:.75rem;font-weight:500}
+.insta-link{color:#185FA5;text-decoration:none}
+.insta-link:hover{text-decoration:underline}
+@media(max-width:480px){.form-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>⚽ 럽앤풋 참가 신청서</h1>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('register')">✏️ 신청하기</button>
+    <button class="tab" onclick="switchTab('list')">📋 참가자 목록</button>
+    <button class="tab" onclick="switchTab('stats')">📊 통계</button>
+  </div>
+
+  <div id="sec-register" class="section active">
+    <div class="card">
+      <p class="card-title">참가자 정보 입력</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>이름 <span class="required">*</span></label>
+          <input type="text" id="inp-name" placeholder="홍길동" />
+        </div>
+        <div class="form-group">
+          <label>성별 <span class="required">*</span></label>
+          <select id="inp-gender">
+            <option value="">선택</option>
+            <option value="남성">남성</option>
+            <option value="여성">여성</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>나이 (만 나이 금지) <span class="required">*</span></label>
+          <input type="number" id="inp-age" placeholder="25" min="10" max="99" />
+        </div>
+        <div class="form-group">
+          <label>출생연도</label>
+          <input type="number" id="inp-birth" placeholder="2000" min="1930" max="2015" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>풋살/축구 구력 (년) <span class="required">*</span></label>
+          <input type="number" id="inp-exp" placeholder="3" min="0" max="50" />
+        </div>
+        <div class="form-group">
+          <label>전화번호</label>
+          <input type="tel" id="inp-phone" placeholder="010-0000-0000" maxlength="13" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>인스타그램</label>
+          <input type="text" id="inp-insta" placeholder="@username" />
+        </div>
+        <div></div>
+      </div>
+
+      <div class="agree-box" id="agree-box-1">
+        <div class="agree-text">
+          <strong>개인정보 수집 및 활용 동의</strong><br/>
+          입력하신 개인정보(이름, 나이, 성별, 연락처 등)는 행사 운영 목적으로만 수집되며, 행사 종료 후 전량 폐기됩니다.
+        </div>
+        <label class="agree-check">
+          <input type="checkbox" id="chk-privacy" />
+          <span>개인정보 수집 및 활용에 동의합니다. <span class="required">*</span></span>
+        </label>
+      </div>
+
+      <div class="agree-box" id="agree-box-2">
+        <div class="agree-text">
+          <strong>사진 및 동영상 촬영 동의</strong><br/>
+          행사 진행 시 사진 및 동영상 촬영이 진행됩니다. 촬영본은 내부 보고용 및 SNS 홍보에 활용될 수 있습니다.
+        </div>
+        <label class="agree-check">
+          <input type="checkbox" id="chk-photo" />
+          <span>사진 및 동영상 촬영에 동의합니다. <span class="required">*</span></span>
+        </label>
+      </div>
+
+      <button class="btn-primary" id="submit-btn" onclick="registerPlayer()">신청하기</button>
+      <div class="msg" id="reg-msg"></div>
+    </div>
+  </div>
+
+  <div id="sec-list" class="section">
+    <div class="filter-bar">
+      <select class="filter-select" id="filter-gender" onchange="renderList()">
+        <option value="">성별 전체</option>
+        <option value="남성">남성</option>
+        <option value="여성">여성</option>
+      </select>
+      <select class="filter-select" id="filter-age" onchange="renderList()">
+        <option value="">나이대 전체</option>
+        <option value="10">10대</option>
+        <option value="20">20대</option>
+        <option value="30">30대</option>
+        <option value="40">40대</option>
+        <option value="50">50대+</option>
+      </select>
+      <select class="filter-select" id="filter-exp" onchange="renderList()">
+        <option value="">구력 전체</option>
+        <option value="0">1년 미만</option>
+        <option value="1">1~3년</option>
+        <option value="3">3~5년</option>
+        <option value="5">5~10년</option>
+        <option value="10">10년+</option>
+      </select>
+      <button class="refresh-btn" onclick="loadPlayers()">🔄 새로고침</button>
+    </div>
+    <div class="card">
+      <div id="list-body"><div class="loading">불러오는 중...</div></div>
+    </div>
+  </div>
+
+  <div id="sec-stats" class="section">
+    <div id="stats-body"><div class="loading">불러오는 중...</div></div>
+  </div>
+</div>
+
+<script>
+const API = 'https://script.google.com/macros/s/AKfycbz5Zi6RNdzDXOojT3ztmcuvFKhM-SpmxRSXSDZG8v24jkb_Zu2_PKUkl6VrJzYjz0dqsA/exec';
+let players = [];
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach((el,i)=>{
+    el.classList.toggle('active',['register','list','stats'][i]===t);
+  });
+  ['register','list','stats'].forEach(s=>{
+    document.getElementById('sec-'+s).classList.toggle('active',s===t);
+  });
+  if(t==='list'){if(!players.length)loadPlayers();else renderList();}
+  if(t==='stats'){if(!players.length)loadPlayers('stats');else renderStats();}
+}
+
+async function loadPlayers(target){
+  try{
+    const res = await fetch(API+'?action=getAll');
+    const data = await res.json();
+    players = data.players || [];
+    if(target==='stats') renderStats();
+    else renderList();
+  }catch(e){
+    const el=document.getElementById(target==='stats'?'stats-body':'list-body');
+    el.innerHTML='<div class="empty" style="color:#e24b4a">데이터를 불러오지 못했어요.<br>Apps Script 배포 설정을 확인해 주세요.</div>';
+  }
+}
+
+function formatPhone(v){
+  const d=v.replace(/\D/g,'');
+  if(d.length<=3) return d;
+  if(d.length<=7) return d.slice(0,3)+'-'+d.slice(3);
+  return d.slice(0,3)+'-'+d.slice(3,7)+'-'+d.slice(7,11);
+}
+
+document.getElementById('inp-phone').addEventListener('input',function(){
+  this.value=formatPhone(this.value);
+});
+document.getElementById('inp-age').addEventListener('input',function(){
+  const age=parseInt(this.value);
+  if(age>=10&&age<=99) document.getElementById('inp-birth').value=new Date().getFullYear()-age;
+});
+document.getElementById('inp-birth').addEventListener('input',function(){
+  const year=parseInt(this.value);
+  if(year>=1930&&year<=2015) document.getElementById('inp-age').value=new Date().getFullYear()-year;
+});
+
+async function registerPlayer(){
+  const name=document.getElementById('inp-name').value.trim();
+  const age=parseInt(document.getElementById('inp-age').value);
+  const birth=document.getElementById('inp-birth').value.trim();
+  const gender=document.getElementById('inp-gender').value;
+  const exp=document.getElementById('inp-exp').value.trim();
+  const phone=document.getElementById('inp-phone').value.trim();
+  const insta=document.getElementById('inp-insta').value.trim();
+  const privacyOk=document.getElementById('chk-privacy').checked;
+  const photoOk=document.getElementById('chk-photo').checked;
+
+  if(!name||!age||!gender||exp===''){showMsg('필수 항목(이름, 나이, 성별, 구력)을 입력해 주세요.','error');return;}
+
+  if(!privacyOk){
+    document.getElementById('agree-box-1').classList.add('required-alert');
+    showMsg('개인정보 수집 및 활용에 동의해 주세요.','error');
+    document.getElementById('agree-box-1').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  } else {
+    document.getElementById('agree-box-1').classList.remove('required-alert');
+  }
+
+  if(!photoOk){
+    document.getElementById('agree-box-2').classList.add('required-alert');
+    showMsg('사진 및 동영상 촬영에 동의해 주세요.','error');
+    document.getElementById('agree-box-2').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  } else {
+    document.getElementById('agree-box-2').classList.remove('required-alert');
+  }
+
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true;btn.textContent='저장 중...';
+  try{
+    await fetch(API,{method:'POST',body:JSON.stringify({action:'add',player:{name,age,birthYear:birth,gender,exp:parseFloat(exp),phone,instagram:insta}})});
+    showMsg('신청이 완료됐어요! 감사합니다 😊','success');
+    ['inp-name','inp-age','inp-birth','inp-phone','inp-insta','inp-exp'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('inp-gender').value='';
+    document.getElementById('chk-privacy').checked=false;
+    document.getElementById('chk-photo').checked=false;
+    players=[];
+  }catch(e){
+    showMsg('저장 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.','error');
+  }
+  btn.disabled=false;btn.textContent='신청하기';
+}
+
+function showMsg(txt,type){
+  const el=document.getElementById('reg-msg');
+  el.textContent=txt;el.className='msg '+type;el.style.display='block';
+  setTimeout(()=>el.style.display='none',4000);
+}
+
+function expLabel(e){
+  const n=parseFloat(e);
+  if(n<1) return '1년 미만';
+  if(n<3) return '1~3년';
+  if(n<5) return '3~5년';
+  if(n<10) return '5~10년';
+  return '10년+';
+}
+
+function renderList(){
+  const gf=document.getElementById('filter-gender').value;
+  const af=document.getElementById('filter-age').value;
+  const ef=document.getElementById('filter-exp').value;
+  let filtered=players.filter(p=>{
+    if(gf&&p['성별']!==gf) return false;
+    if(af){const age=parseInt(p['나이']);if(af==='50'&&age<50)return false;if(af!=='50'&&Math.floor(age/10)*10!==parseInt(af))return false;}
+    if(ef){const ev=parseInt(ef);const exp=parseFloat(p['구력']);
+      if(ev===0&&exp>=1)return false;if(ev===1&&(exp<1||exp>=3))return false;
+      if(ev===3&&(exp<3||exp>=5))return false;if(ev===5&&(exp<5||exp>=10))return false;
+      if(ev===10&&exp<10)return false;}
+    return true;
+  });
+  const el=document.getElementById('list-body');
+  if(!filtered.length){el.innerHTML='<div class="empty">해당하는 참가자가 없어요</div>';return;}
+  el.innerHTML=`<div class="tbl-wrap"><table>
+    <thead><tr><th>이름</th><th>나이</th><th>성별</th><th>구력</th><th>전화번호</th><th>인스타그램</th></tr></thead>
+    <tbody>${filtered.sort((a,b)=>parseInt(a['나이'])-parseInt(b['나이'])).map(p=>`<tr>
+      <td>${p['이름']||'-'}</td>
+      <td>${p['나이']}세${p['출생연도']?` <span style="color:#bbb;font-size:11px">${p['출생연도']}년생</span>`:''}</td>
+      <td><span class="badge ${p['성별']==='남성'?'badge-m':'badge-f'}">${p['성별']||'-'}</span></td>
+      <td>${expLabel(p['구력'])}</td>
+      <td>${p['전화번호']||'-'}</td>
+      <td>${p['인스타그램']?`<a class="insta-link" href="https://instagram.com/${p['인스타그램'].replace('@','')}" target="_blank">${p['인스타그램']}</a>`:'-'}</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function bar(label,count,max,color){
+  const pct=max?Math.round(count/max*100):0;
+  return `<div class="bar-row"><span class="bar-label">${label}</span><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="bar-count">${count}명</span></div>`;
+}
+
+function renderStats(){
+  const el=document.getElementById('stats-body');
+  if(!players.length){el.innerHTML='<div class="card"><div class="empty">등록된 참가자가 없어요</div></div>';return;}
+  const total=players.length;
+  const male=players.filter(p=>p['성별']==='남성').length;
+  const female=players.filter(p=>p['성별']==='여성').length;
+  const ages=players.map(p=>parseInt(p['나이'])).filter(Boolean);
+  const exps=players.map(p=>parseFloat(p['구력'])).filter(n=>!isNaN(n));
+  const avgAge=ages.length?Math.round(ages.reduce((s,v)=>s+v,0)/ages.length):0;
+  const avgExp=exps.length?(exps.reduce((s,v)=>s+v,0)/exps.length).toFixed(1):0;
+  const decades={};
+  players.forEach(p=>{const a=parseInt(p['나이']);if(!a)return;const d=a>=50?'50대+':Math.floor(a/10)*10+'대';decades[d]=(decades[d]||0)+1;});
+  const expGroups={'1년 미만':0,'1~3년':0,'3~5년':0,'5~10년':0,'10년+':0};
+  exps.forEach(e=>{if(e<1)expGroups['1년 미만']++;else if(e<3)expGroups['1~3년']++;else if(e<5)expGroups['3~5년']++;else if(e<10)expGroups['5~10년']++;else expGroups['10년+']++;});
+  const maxD=Math.max(...Object.values(decades),1);
+  const maxE=Math.max(...Object.values(expGroups),1);
+  el.innerHTML=`
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-lbl">전체 참가자</div></div>
+    <div class="stat-card"><div class="stat-val">${male}</div><div class="stat-lbl">남성</div></div>
+    <div class="stat-card"><div class="stat-val">${female}</div><div class="stat-lbl">여성</div></div>
+    <div class="stat-card"><div class="stat-val">${avgAge}세</div><div class="stat-lbl">평균 나이</div></div>
+    <div class="stat-card"><div class="stat-val">${avgExp}년</div><div class="stat-lbl">평균 구력</div></div>
+  </div>
+  <div class="card">
+    <div class="chart-title">나이대별 분포</div>
+    ${Object.entries(decades).sort().map(([k,v],i)=>bar(k,v,maxD,['#378ADD','#1D9E75','#BA7517','#D85A30','#7F77DD'][i%5])).join('')}
+  </div>
+  <div class="card">
+    <div class="chart-title">구력별 분포</div>
+    ${Object.entries(expGroups).map(([k,v],i)=>bar(k,v,maxE,['#5DCAA5','#378ADD','#7F77DD','#D4537E','#D85A30'][i])).join('')}
+  </div>`;
+}
+</script>
+</body>
+</html>
