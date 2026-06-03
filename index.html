@@ -21,6 +21,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:1.5rem;color:#1a1a1a}
 .form-group input,.form-group select{font-size:14px;padding:9px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a1a;outline:none;transition:border .15s}
 .form-group input:focus,.form-group select:focus{border-color:#888}
 .form-group input::placeholder{color:#bbb}
+.field-hint{font-size:12px;color:#999;line-height:1.5;margin-top:2px}
 .required{color:#e24b4a;margin-left:2px}
 .agree-box{border:1px solid #e5e5e5;border-radius:10px;padding:1rem;margin-bottom:12px;background:#fafafa}
 .agree-text{font-size:13px;color:#444;line-height:1.6;margin-bottom:10px}
@@ -126,6 +127,7 @@ tr:last-child td{border-bottom:none}
         <div class="form-group">
           <label>인스타그램</label>
           <input type="text" id="inp-insta" placeholder="@username" />
+          <div class="field-hint">기본적인 신원 확인을 위해 수집합니다. 비공개 계정일 경우 선정에서 후순위로 밀릴 수 있습니다.</div>
         </div>
         <div></div>
       </div>
@@ -142,7 +144,7 @@ tr:last-child td{border-bottom:none}
       <div class="agree-box" id="agree-box-2">
         <div class="agree-text">
           <strong>사진 및 동영상 촬영 동의</strong><br/>
-          행사 진행 시 사진 및 동영상 촬영이 진행됩니다. 촬영본은 내부 보고용 및 SNS 홍보에 활용될 수 있습니다.
+          행사 진행 시 사진 및 동영상 촬영이 진행됩니다. 촬영본은 내부 보고용, SNS 홍보 및 영상 제작에 활용될 수 있습니다.
         </div>
         <label class="agree-check">
           <input type="checkbox" id="chk-photo" />
